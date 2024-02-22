@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B1DE5D4C-2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nyanbyte.PPCheck.Tests", "test\Nyanbyte.PPCheck.Tests\Nyanbyte.PPCheck.Tests.csproj", "{0C4EC394-8D41-42DF-BCE3-5FB43661D8E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nyanbyte.PPCheck.Worker", "src\Nyanbyte.PPCheck.Worker\Nyanbyte.PPCheck.Worker.csproj", "{D53CFC0B-D1B9-408D-B8D8-5F8FD3B06DC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,9 +30,14 @@ Global
 		{0C4EC394-8D41-42DF-BCE3-5FB43661D8E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C4EC394-8D41-42DF-BCE3-5FB43661D8E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C4EC394-8D41-42DF-BCE3-5FB43661D8E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53CFC0B-D1B9-408D-B8D8-5F8FD3B06DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53CFC0B-D1B9-408D-B8D8-5F8FD3B06DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53CFC0B-D1B9-408D-B8D8-5F8FD3B06DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53CFC0B-D1B9-408D-B8D8-5F8FD3B06DC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{02AFAE01-FBD5-49EE-8D3F-329CDA5FEA79} = {C3B18ED6-C901-49BD-A417-B28A660CE50A}
 		{0C4EC394-8D41-42DF-BCE3-5FB43661D8E2} = {B1DE5D4C-2699-46CA-AB98-27172F955862}
+		{D53CFC0B-D1B9-408D-B8D8-5F8FD3B06DC8} = {C3B18ED6-C901-49BD-A417-B28A660CE50A}
 	EndGlobalSection
 EndGlobal
