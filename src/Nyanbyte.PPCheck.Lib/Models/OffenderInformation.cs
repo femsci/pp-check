@@ -20,7 +20,7 @@ public record OffenderPersona
     public string LastName { get; set; } = string.Empty;
     public string CityOfBirth { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
-    public char Sex { get; set; }
+    public string Sex { get; set; } = string.Empty;
     public string FamilyName { get; set; } = string.Empty;
     public string? FathersName { get; set; }
     public string? MothersName { get; set; }
@@ -29,5 +29,5 @@ public record OffenderPersona
     public string DwellingPlace { get; set; } = string.Empty;
 
     [JsonIgnore]
-    public Sex OffenderSex => (Sex)Sex;
+    public Sex OffenderSex => string.IsNullOrWhiteSpace(Sex) ? Models.Sex.Unknown : (Sex)Sex[0];
 }
