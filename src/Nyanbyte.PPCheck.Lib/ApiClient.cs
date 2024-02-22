@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Nyanbyte.PPCheck.Lib.Models;
@@ -56,6 +57,28 @@ public class ApiClient : IDisposable
         var resp = await httpResponse.Content.ReadFromJsonAsync<SearchResponse>() ?? throw new DataException("Invalid data returned.");
 
         return resp;
+    }
+
+    public async Task<byte[]?> GetImage(Guid identityId)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"Persone/ImageGet/{identityId}");
+        request.Headers.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0");
+        request.Headers.Add("Referer", "https://rps.ms.gov.pl/pl-PL/Public");
+        request.Headers.Add("Accept", "application/json, text/plain, */*");
+        request.Headers.Add("Accept-Language", "en-US,en;q=0.5");
+
+        var httpResponse = await _http.SendAsync(request);
+        httpResponse.EnsureSuccessStatusCode();
+
+        string resp = (await httpResponse.Content.ReadAsStringAsync()).Trim('"');
+
+        if (resp == null)
+        {
+            return null;
+        }
+
+        byte[] img = Convert.FromBase64String(resp);
+        return img;
     }
 
     public void Dispose()
