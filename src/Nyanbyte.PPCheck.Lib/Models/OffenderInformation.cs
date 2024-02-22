@@ -8,7 +8,7 @@ public record OffenderInformation
     public int AnnotationCount { get; set; }
 
     [JsonPropertyName("persones")]
-    public ICollection<OffenderPersona> Personas { get; set; } = [];
+    public IList<OffenderPersona> Personas { get; set; } = [];
 }
 
 public record OffenderPersona
