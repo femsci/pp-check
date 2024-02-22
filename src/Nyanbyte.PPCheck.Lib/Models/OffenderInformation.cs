@@ -8,7 +8,7 @@ public record OffenderInformation
     public int AnnotationCount { get; set; }
 
     [JsonPropertyName("persones")]
-    public ICollection<OffenderPersona> Personas { get; set; } = new List<OffenderPersona>();
+    public ICollection<OffenderPersona> Personas { get; set; } = [];
 }
 
 public record OffenderPersona
@@ -17,14 +17,17 @@ public record OffenderPersona
     public Guid PersonIdentityId { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string? SecondName { get; set; }
-    public string LastName { get; set; }
-    public string CityOfBirth { get; set; }
+    public string LastName { get; set; } = string.Empty;
+    public string CityOfBirth { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
-    public string FamilyName { get; set; }
+    public char Sex { get; set; }
+    public string FamilyName { get; set; } = string.Empty;
     public string? FathersName { get; set; }
     public string? MothersName { get; set; }
-    public Sex Sex { get; set; }
-    public string CountryOfBirth { get; set; }
-    public string Nationalities { get; set; }
-    public string DwellingPlace { get; set; }
+    public string CountryOfBirth { get; set; } = string.Empty;
+    public string Nationalities { get; set; } = string.Empty;
+    public string DwellingPlace { get; set; } = string.Empty;
+
+    [JsonIgnore]
+    public Sex OffenderSex => (Sex)Sex;
 }
