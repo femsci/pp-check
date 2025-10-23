@@ -30,4 +30,6 @@ public record OffenderPersona
 
     [JsonIgnore]
     public Sex OffenderSex => string.IsNullOrWhiteSpace(Sex) ? Models.Sex.Unknown : (Sex)Sex[0];
+    [JsonIgnore]
+    public virtual byte[]? Picture { get; set; }
 }

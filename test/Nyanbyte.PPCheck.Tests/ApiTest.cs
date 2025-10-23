@@ -22,17 +22,17 @@ public class Tests
         };
 
         var results = await cli.Search(req);
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(results.HasError, Is.False);
             Assert.That(results.Total, Is.GreaterThan(0));
-        });
+        }
 
         var person = results.Data[0].Personas[0];
-        Assert.Multiple(() =>
+        using (Assert.EnterMultipleScope())
         {
             Assert.That(person.FirstName, Is.EqualTo("DARIUSZ"));
             Assert.That(person.LastName, Is.EqualTo("ADAMSKI"));
-        });
+        }
     }
 }

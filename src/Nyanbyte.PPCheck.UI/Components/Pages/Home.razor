@@ -1,0 +1,136 @@
+﻿@page "/"
+@using System.Collections.Immutable
+@using Nyanbyte.PPCheck.Lib
+@using Nyanbyte.PPCheck.Lib.Models
+@using QuestPDF
+@using QuestPDF.Fluent
+@using QuestPDF.Infrastructure
+@inject IJSRuntime JS
+@rendermode InteractiveServer
+
+<PageTitle>PPCheck</PageTitle>
+
+<h1>pp check :3</h1>
+@switch (_state)
+{
+    case State.Input:
+        <textarea @onchange="Update"></textarea>
+        <PreviewTable Data="@_names"></PreviewTable>
+        <button disabled="@_aValid" @onclick="Proceed">Sprawdź</button>
+
+        break;
+    case State.Processing:
+        if (_cur != null)
+        {
+            <p>Przetwarzanie: @_cur</p>
+        }
+
+        if (_offenders.Count > 0)
+        {
+            <p class="alert">Wykryto @_offenders.Count @OffenderFlexion()</p>
+        }
+
+        break;
+    case State.Done:
+        <h3>Podsumowanie</h3>
+        if (_offenders.Count == 0)
+        {
+            <p class="text-green">Nie wykryto żadnych podejrzeń</p>
+        }
+        else
+        {
+            <p class="alert">Wykryto @_offenders.Count @OffenderFlexion()!</p>
+        }
+
+        <button @onclick="GenerateReport">Pobierz raport</button>
+
+        break;
+}
+
+@code {
+    private string? _cur;
+    private HashSet<(string, string)> _names = [];
+    private bool _aValid = true;
+    private State _state = State.Input;
+    private readonly Dictionary<(string, string), HashSet<OffenderInformation>> _offenders = [];
+
+    private enum State
+    {
+        Input,
+        Processing,
+        Done
+    }
+
+    private void Update(ChangeEventArgs e)
+    {
+        _names = (e.Value as string)!.Split("\n")
+            .Select(x => x.Trim().Split(" ", 2))
+            .Where(x => x.Length == 2)
+            .Select(x => (x[1], x[0].TrimStart()))
+            .ToHashSet();
+
+        _aValid = _names.Count == 0;
+    }
+
+    private IList<SearchRequest> GetRequests() => _names.Select(x => new SearchRequest
+    {
+        FirstName = x.Item1,
+        LastName = x.Item2
+    }).ToImmutableList();
+
+    private async Task Proceed(object _)
+    {
+        _state = State.Processing;
+        var requests = GetRequests();
+
+        using ApiClient cli = new();
+
+        foreach (var req in requests)
+        {
+            _cur = $"{req.FirstName} {req.LastName}";
+            StateHasChanged();
+            await Task.Yield();
+            var resp = await cli.Search(req);
+
+            if (resp.Data.Count > 0)
+            {
+                _offenders.Add((req.FirstName!, req.LastName!), resp.Data.ToHashSet());
+                StateHasChanged();
+                await Task.Yield();
+            }
+
+            await Task.Delay(TimeSpan.FromMilliseconds(600));
+
+            if (resp.HasError)
+            {
+                await Console.Error.WriteLineAsync($"err: {req.FirstName} {req.LastName}");
+            }
+        }
+
+        _state = State.Done;
+    }
+
+    private async Task GenerateReport(object _)
+    {
+        Settings.License = LicenseType.Community;
+        var pdf = PdfGenerator.GenerateReport(_names, _offenders);
+
+        using var streamRef = new DotNetStreamReference(new MemoryStream(pdf.GeneratePdf()));
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", "report.pdf", streamRef);
+    }
+
+    private string OffenderFlexion()
+    {
+        // why? because blazor does not compile with multi-line interpolated strings
+        string suffix = _offenders.Count switch
+        {
+            1 => "nie",
+            > 1 and < 5 => "nia",
+            _ => "ń"
+        };
+
+        return $"podejrze{suffix}";
+    }
+
+}

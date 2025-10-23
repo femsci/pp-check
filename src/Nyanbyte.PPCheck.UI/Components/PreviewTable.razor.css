@@ -1,0 +1,22 @@
+h5 {
+    margin-bottom: 0.25em;
+}
+
+table {
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 80%;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tbody > tr {
+    border-top: 2px solid darkgray;
+}
+
+td {
+    padding: 5px 2ch 5px 2ch;
+}

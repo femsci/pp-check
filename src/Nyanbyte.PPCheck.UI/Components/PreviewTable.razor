@@ -1,0 +1,36 @@
+<h2>Dane:</h2>
+@if (Data.Count == 0)
+{
+    <p>brak danych</p>
+}
+else
+{
+    <table>
+        <thead>
+        <tr>
+            <th>L.p.</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            nint idx = 1;
+        }
+        @foreach (var row in Data)
+        {
+            <tr>
+                <td>@idx</td>
+                <td>@row.Item1</td>
+                <td>@row.Item2</td>
+            </tr>
+            ++idx;
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public required ICollection<(string, string)> Data { get; init; }
+}
